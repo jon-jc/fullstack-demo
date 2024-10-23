@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ChevronDown,
   Code,
@@ -9,7 +9,6 @@ import {
   Shield,
   FileText,
   Zap,
-  Send,
   CheckCircle,
   Users,
   Briefcase,
@@ -20,40 +19,19 @@ import {
   Glasses,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { toast } from "@/hooks/use-toast";
+
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import ContactForm from "./contact-form";
 
 export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const aboutRef = useRef<HTMLElement>(null);
   const expertiseRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
   const portfolioRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Here you would typically send the form data to your server
-    toast({
-      title: "Form submitted!",
-      description: "We'll get back to you soon.",
-    });
-    setIsFormOpen(false);
-  };
 
   const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -225,126 +203,11 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Button size="lg" onClick={() => setIsFormOpen(!isFormOpen)}>
-              Get Started
-            </Button>
+            <div className="w-auto h-auto">
+              <ContactForm />
+            </div>
           </motion.div>
         </section>
-
-        <AnimatePresence>
-          {isFormOpen && (
-            <motion.section
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-gray-800 p-8 rounded-lg w-full max-w-2xl"
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-              >
-                <h2 className="text-2xl font-bold mb-6">Contact Us</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="Your Name" required />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your@email.com"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="company">Company</Label>
-                    <Input id="company" placeholder="Your Company" />
-                  </div>
-                  <div>
-                    <Label htmlFor="project-type">Project Type</Label>
-                    <Select required>
-                      <SelectTrigger id="project-type">
-                        <SelectValue placeholder="Select a project type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="web-development">
-                          Web Development
-                        </SelectItem>
-                        <SelectItem value="mobile-app">Mobile App</SelectItem>
-                        <SelectItem value="desktop-application">
-                          Desktop Application
-                        </SelectItem>
-                        <SelectItem value="full-stack">
-                          Full Stack Solution
-                        </SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="budget">Budget Range</Label>
-                    <Select required>
-                      <SelectTrigger id="budget">
-                        <SelectValue placeholder="Select a budget range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="10k-25k">
-                          $10,000 - $25,000
-                        </SelectItem>
-                        <SelectItem value="25k-50k">
-                          $25,000 - $50,000
-                        </SelectItem>
-                        <SelectItem value="50k-100k">
-                          $50,000 - $100,000
-                        </SelectItem>
-                        <SelectItem value="100k+">$100,000+</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Preferred Contact Method</Label>
-                    <RadioGroup defaultValue="email" className="flex space-x-4">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="email" id="contact-email" />
-                        <Label htmlFor="contact-email">Email</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="phone" id="contact-phone" />
-                        <Label htmlFor="contact-phone">Phone</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <div>
-                    <Label htmlFor="message">Project Details</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="Tell us about your project requirements and goals"
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-end space-x-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsFormOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button type="submit">
-                      <Send className="mr-2 h-4 w-4" /> Send Message
-                    </Button>
-                  </div>
-                </form>
-              </motion.div>
-            </motion.section>
-          )}
-        </AnimatePresence>
 
         <section id="about" ref={aboutRef} className="py-20 bg-gray-900">
           <div className="container mx-auto px-4">
@@ -745,7 +608,7 @@ export default function LandingPage() {
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
             <p>
-              &copy; {new Date().getFullYear()} THIS IS FOR DEMOnSTRATION
+              &copy; {new Date().getFullYear()} THIS IS FOR DEMONSTRATION
               PURPOSES ONLY
             </p>
           </div>
